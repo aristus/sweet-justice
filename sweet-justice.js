@@ -40,7 +40,7 @@
           break;
 
         case 1: // Node.ELEMENT_NODE
-          if (!tag_blacklist[node.nodeName]) {
+          if (!tag_blacklist[node.nodeName.toLowerCase()]) {
             justify_my_love(node);
           }
           break;
@@ -55,7 +55,7 @@
     var words = text.split(/[\s\n\r\v\t]+/);
     for (var i=0; i<words.length; i++) {
       var word = words[i];
-      if (word.length >= MIN_WORD && word[0] !== '&') {
+      if (word.length >= MIN_WORD && word.charAt(0) !== '&') {
         words[i] = word.replace(simple, insert).replace(/\u00AD$/, '');
       }
     }
@@ -66,7 +66,7 @@
   var simple = /.{1,3}[^\-]/g;
 
   function insert(text) {
-    //return text + '*';
+    //return text + '*'; // debugging
     return text + '\u00AD';
   }
 
