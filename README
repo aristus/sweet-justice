@@ -1,0 +1,15 @@
+Sweet Justice: beautiful justified text.
+
+Include this file at the bottom of your pages.
+Give any DOM element the class "sweet-justice"
+and this code will insert appropriate "shy" hy-
+phens into your text to produce pretty justi-
+fication.
+
+Works with *both* Jquery and YUI3.
+
+BSD license: Enjoy, but give credit where it's due.
+
+carlos@bueno.org 23 April 2010
+github.com/aristus/sweet-justice
+
