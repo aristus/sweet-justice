@@ -143,7 +143,7 @@
   // YUI3
   function sweet_justice_yui(Y) {
     Y.all('.sweet-justice').each(function(el) {
-      el.setStyle('text-align','justify');
+      el.setStyle('textAlign','justify');
       justify_my_love(el._node);
     });
 
