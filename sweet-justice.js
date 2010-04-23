@@ -72,14 +72,17 @@
     return text + '\u00AD';
   }
 
-  // the shy-phen character is an odd duck. on copy/paste
-  // most systems will translate them to hard spaces, which is
-  // usually not what you want. so on copy we take 'em out.
-  // The selection APIs are very different across browsers
-  // so there is a lot of jazzhands in this function.
+  // The shy-phen character is an odd duck. On copy/paste
+  // most apps other than browsers treat them as printable
+  // instead of a hyphenation hint, which is usually not what
+  // you want. So on copy we take 'em out. The selection APIs
+  // are very different across browsers so there is a lot of
+  // jazzhands in this function.
   function copy_protect(e) {
     var body = document.getElementsByTagName("body")[0];
     var sel = '';
+
+    // FF3, WebKit
     if (typeof window.getSelection != "undefined") {
       sel = window.getSelection();
       var range = sel.getRangeAt(0);
@@ -103,15 +106,27 @@
           );
         }
       },0);
+
+    // Internet Explorer. not tested. need halp! :(
     } else {
-      // Internet Explorer. need halp! :(
-      // sel = document.selection;
-      // var range = sel.createRange();
-      // var shadow = document.createElement("div");
-      // shadow.innerHTML = range.htmlText.replace(/\u00AD/g, '');
-      // var range2 = body.createTextRange();
-      // range2.moveToElementText(shadow);
-      // range2.select();
+      sel = document.selection;
+      var range = sel.createRange();
+      var shadow = document.createElement("div");
+      shadow.style.overflow = 'hidden';
+      shadow.style.position = 'absolute';
+      shadow.style.top = '-5000px';
+      shadow.style.height = '1px';
+      body.appendChild(shadow);
+      shadow.innerHTML = range.htmlText.replace(/\u00AD/g, '');
+      var range2 = body.createTextRange();
+      range2.moveToElementText(shadow);
+      range2.select();
+      window.setTimeout(function() {
+        shadow.parentNode.removeChild(shadow);
+        if (range.text != "") {
+          range.select();
+        }
+      },0);
     }
     return;
   }
@@ -132,7 +147,7 @@
       justify_my_love(el._node);
     });
 
-    // Y.one('body').on('copy', copy_protect); //hmm.YUI3 doesn't work with this.
+    // Y.one('body').on('copy', copy_protect); //hmm. YUI3 doesn't work with this.
     var body = document.getElementsByTagName("body")[0];
     if (window.addEventListener) {
       body.addEventListener("copy", copy_protect, false);
