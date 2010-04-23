@@ -57,26 +57,43 @@
   }
 
   // Given a plain-text string, insert shy-phens into long words.
-  // Does *not* follow English syllable rules, but tries to be som-
-  // ewhat sensible. Whitespace is not preserved.
+  // Variant of the VCCV algorithm
+  // http://www.bramstein.com/projects/typeset/
+  // http://defoe.sourceforge.net/folio/knuth-plass.html
+  // If you are a student of English grammar or typography, this
+  // will make you cry. If you read anything other than English,
+  // this will also make you cry.
   function break_dance(text) {
     var words = text.split(/[\s\n\r\v\t]+/);
     for (var i=0; i<words.length; i++) {
-      var word = words[i];
-      if (word.length >= MIN_WORD && !/^[0-9\&]/.test(word)) {
-        words[i] = word.replace(simple, insert)
-          .replace(/\u00AD(.{0,1})$/, '$1'); // no "hyphen-s"
+      if (breakable(words[i])) {
+        words[i] = words[i]
+          .replace(vccv, '$1\u00AD$2')
+          .replace(simple, '$1\u00AD$2')
+          .replace(/\u00AD(.?)$/, '$1'); // no "hyphen-s"
       }
     }
     return words.join(' ');
   }
 
-  var faux_english = /.{1,3}[aeiouy]/gi;
-  var simple = /[\w]{1,4}/g;
+  // Detect all Unicode vowels. Just last week I told someone
+  // to never do this. Never say never, I guess.
+  var vowels = 'aeiouyAEIOUY'+
+    'ẚÁáÀàĂăẮắẰằẴẵẲẳÂâẤấẦầẪẫẨẩǍǎÅåǺǻÄäǞǟÃãȦȧǠǡĄąĀāẢảȀȁȂȃẠạẶặẬậḀḁȺⱥ'+
+    'ǼǽǢǣÉƏƎǝéÈèĔĕÊêẾếỀềỄễỂểĚěËëẼẽĖėȨȩḜḝĘęĒēḖḗḔḕẺẻȄȅȆȇẸẹỆệḘḙḚḛɆɇɚɝÍíÌìĬĭÎîǏǐÏ'+
+    'ïḮḯĨĩİiĮįĪīỈỉȈȉȊȋỊịḬḭIıƗɨÓóÒòŎŏÔôỐốỒồỖỗỔổǑǒÖöȪȫŐőÕõṌṍṎṏȬȭȮȯȰȱØøǾǿǪǫǬǭŌōṒṓ'+
+    'ṐṑỎỏȌȍȎȏƠơỚớỜờỠỡỞởỢợỌọỘộƟɵÚúÙùŬŭÛûǓǔŮůÜüǗǘǛǜǙǚǕǖŰűŨũṸṹŲųŪūṺṻỦủȔȕȖȗƯưỨứỪừ'+
+    'ỮữỬửỰựỤụṲṳṶṷṴṵɄʉÝýỲỳŶŷY̊ẙŸÿỸỹẎẏȲȳỶỷỴỵʏɎɏƳƴ';
+  var c = '[^'+vowels+']';
+  var v = '['+vowels+']';
+  var vccv = new RegExp('('+v+c+')('+c+v+')', 'g');
+  var simple = new RegExp('(.{2,3}'+v+')'+'('+c+')', 'g');
 
-  function insert(text) {
-    //return text + '*'; // debugging
-    return text + '\u00AD';
+  // determine whether a word is good for hyphenation.
+  // no numbers, email addresses, hyphens, or &entities;
+  function breakable(word) {
+    return word.length >= MIN_WORD &&
+      (!/^[0-9\&]|@|\-|\u00AD/.test(word));
   }
 
   // The shy-phen character is an odd duck. On copy/paste
@@ -84,7 +101,10 @@
   // instead of a hyphenation hint, which is usually not what
   // you want. So on copy we take 'em out. The selection APIs
   // are very different across browsers so there is a lot of
-  // browser-specific jazzhands in this function.
+  // browser-specific jazzhands in this function. The basic
+  // idea is to grab the data being copied, make a "shadow"
+  // element of it, remove the shy-phens, select and copy
+  // that, then reinstate the original selection.
   //
   // More than you ever wanted to know:
   // http://www.cs.tut.fi/~jkorpela/shy.html
