@@ -1,15 +1,20 @@
 Sweet Justice: beautiful justified text.
 
-Include this file at the bottom of your pages.
-Give any DOM element the class "sweet-justice"
-and this code will insert appropriate "shy" hy-
-phens into your text to produce pretty justi-
-fication.
+Include this file at the bottom of your pages
+and it will hyphenate and justify your text.
+The script pays attention to elements with
+any of these three CSS classes:
 
-Works with *both* Jquery and YUI3.
+  sweet-justice:  Hyphenated and justified
+  sweet-hypens:   Hyphenation only
+  justice-denied: No hypens or justification.
+                  This is useful for child nodes.
 
-BSD license: Enjoy, but give credit where it's due.
+Hyphenation is accomplished by inserting soft
+hyphen characters (0x00AD) into long words.
 
-carlos@bueno.org 23 April 2010
+Requires either jQuery or YUI3.
+
+BSD license: Share and enjoy.
+@author carlos@bueno.org 23 April 2010
 github.com/aristus/sweet-justice
-
