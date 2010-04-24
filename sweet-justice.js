@@ -77,7 +77,9 @@
   }
 
   // Detect all Unicode vowels. Just last week I told someone
-  // to never do this. Never say never, I guess.
+  // to never do this. Never say never, I guess. The Closure
+  // compiler transforms this into ASCII-safe \u0000 encoding.
+  // http://closure-compiler.appspot.com/home
   var vowels = 'aeiouyAEIOUY'+
     'ẚÁáÀàĂăẮắẰằẴẵẲẳÂâẤấẦầẪẫẨẩǍǎÅåǺǻÄäǞǟÃãȦȧǠǡĄąĀāẢảȀȁȂȃẠạẶặẬậḀḁȺⱥ'+
     'ǼǽǢǣÉƏƎǝéÈèĔĕÊêẾếỀềỄễỂểĚěËëẼẽĖėȨȩḜḝĘęĒēḖḗḔḕẺẻȄȅȆȇẸẹỆệḘḙḚḛɆɇɚɝÍíÌìĬĭÎîǏǐÏ'+
