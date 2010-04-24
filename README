@@ -15,6 +15,21 @@ hyphen characters (0x00AD) into long words.
 
 Requires either jQuery or YUI3.
 
+WHAT PEOPLE ARE SAYING:
+----------------------------------------------
+
+"This is just terrible."
+   -- globally_unique_id
+
+"A nice idea, but unusable."
+  -- eleven3
+
+"honestly i'm glad the web doesn't have great
+support for justified text"
+  -- jawbroken
+
+----------------------------------------------
 BSD license: Share and enjoy.
 @author carlos@bueno.org 23 April 2010
 github.com/aristus/sweet-justice
+

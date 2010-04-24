@@ -70,7 +70,7 @@
         words[i] = words[i]
           .replace(vccv, '$1\u00AD$2')
           .replace(simple, '$1\u00AD$2')
-          .replace(/\u00AD(.?)$/, '$1'); // no "hyphen-s"
+          .replace(/\u00AD(.?)|$\u00AD(.{0,2}\w+)$/, '$1'); // no "hyphen-s"
       }
     }
     return words.join(' ');
@@ -87,7 +87,7 @@
   var c = '[^'+vowels+']';
   var v = '['+vowels+']';
   var vccv = new RegExp('('+v+c+')('+c+v+')', 'g');
-  var simple = new RegExp('(.{2,3}'+v+')'+'('+c+')', 'g');
+  var simple = new RegExp('(.{2,4}'+v+')'+'('+c+')', 'g');
 
   // determine whether a word is good for hyphenation.
   // no numbers, email addresses, hyphens, or &entities;
