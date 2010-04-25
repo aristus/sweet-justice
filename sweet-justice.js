@@ -67,13 +67,17 @@
     var words = text.split(/[\s\n\r\v\t]+/);
     for (var i=0; i<words.length; i++) {
       if (breakable(words[i])) {
-        words[i] = words[i]
-          .replace(vccv, '$1\u00AD$2')
-          .replace(simple, '$1\u00AD$2')
-          .replace(/\u00AD(.?)|$\u00AD(.{0,2}\w+)$/, '$1'); // no "hyphen-s"
+        words[i] = break_word_en(words[i]);
       }
     }
     return words.join(' ');
+  }
+
+  // determine whether a word is good for hyphenation.
+  // no numbers, email addresses, hyphens, or &entities;
+  function breakable(word) {
+    return word.length >= MIN_WORD &&
+      (!/^[0-9\&]|@|\-|\u00AD/.test(word));
   }
 
   // Detect all Unicode vowels. Just last week I told someone
@@ -91,11 +95,34 @@
   var vccv = new RegExp('('+v+c+')('+c+v+')', 'g');
   var simple = new RegExp('(.{2,4}'+v+')'+'('+c+')', 'g');
 
-  // determine whether a word is good for hyphenation.
-  // no numbers, email addresses, hyphens, or &entities;
-  function breakable(word) {
-    return word.length >= MIN_WORD &&
-      (!/^[0-9\&]|@|\-|\u00AD/.test(word));
+  // "algorithmic" hyphenation
+  function break_word_default(word) {
+    return word
+      .replace(vccv, '$1\u00AD$2')
+      .replace(simple, '$1\u00AD$2')
+      .replace(/\u00AD(.?)|$\u00AD(.{0,2}\w+)$/, '$1');
+  }
+
+  // dictionary-based hypenation similar to the original
+  // TeX algo: split on well-known prefixes and suffixes
+  // then along the vccv line. This is not i18n nor even
+  // generally correct, but is fairly compact.
+  var presuf = /^([^a-z]*)(anti|auto|ac|ad|ag|an|ap|as|at|ab|bi|be|contra|cat|cath|cir|cum|cog|col|com|con|cor|co|desk|de|dis|dif|di|eas|extra|ex|en|em|epi|hy|han|il|in|im|ir|jus|lig|li|manu|man|mal|mis|mid|mono|multi|non|ob|oc|of|op|over|para|per|post|pre|pro|retro|re|rhy|semi|se|sol|sub|suc|suf|super|sup|sur|sus|syn|sym|tech|trans|tri|typo|type|uni|un|won)?(.*?)(ical|able|ings?|ions?|ies|isms?|ists?|ful|ness|ments?|ly|ify|ize|ise|ity|en|tures?|als?|phy|phies|mums?|ous|cents?)?([^a-z]*)$/i;
+
+  function break_word_en(word) {
+    // punctuation, prefix, center, suffix, punctuation
+    var parts = presuf.exec(word);
+    var ret = [];
+    if (parts[2]) {
+      ret.push(parts[2]);
+    }
+    if (parts[3]) {
+      ret.push(parts[3].replace(vccv, '$1\u00AD$2'));
+    }
+    if (parts[4]) {
+      ret.push(parts[4]);
+    }
+    return (parts[1]||'') + ret.join('\u00AD') + (parts[5]||'');
   }
 
   // The shy-phen character is an odd duck. On copy/paste
