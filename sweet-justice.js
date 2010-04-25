@@ -106,7 +106,7 @@
   // TeX algo: split on well-known prefixes and suffixes
   // then along the vccv line. This is not i18n nor even
   // generally correct, but is fairly compact.
-  var presuf = /^(\W*)(anti|auto|ab|an|ax|al|as|bi|be|contra|cat|cath|cir|cum|cog|col|com|con|cor|co|desk|de|dis|did|dif|di|eas|extra|ex|en|em|epi|fin|hyst|hy|han|il|in|im|ir|just|jus|lig|li|manu|man|mal|mis|mid|mono|multi|mem|micro|non|nano|ob|oc|of|op|over|para|per|post|pre|peo|pro|retro|re|rhy|some|semi|se|sol|sub|suc|suf|super|sup|sur|sus|syn|sym|sen|tech|trans|tri|typo|type|uni|un|won)?(.*?)(icals?|ables?|ings?|tions?|ions?|ies|isms?|ists?|ful|ness|ments?|ly|ify|ize|ise|ity|en|ers?|ences?|tures?|ples?|als?|phy|phies|ry|ries|cy|cies|mums?|ous|cents?)?(\W*)$/i;
+  var presuf = /^(\W*)(anti|auto|ab|an|ax|al|as|bi|be|contra|cat|cath|cir|cum|cog|col|com|con|cor|co|desk|de|dis|did|dif|di|eas|extra|ex|en|em|epi|evi|fin|hyst|hy|han|il|in|im|ir|just|jus|lig|li|mech|manu|man|mal|mis|mid|mono|multi|mem|micro|non|nano|ob|oc|of|op|over|para|per|post|pre|peo|pro|retro|rea|re|rhy|some|semi|sen|sol|sub|suc|suf|super|sup|sur|sus|syn|sym|tech|trans|tri|typo|type|uni|un|won)?(.*?)(icals?|ables?|ings?|tions?|ions?|ies|isms?|ists?|ful|ness|ments?|ly|ify|ize|ise|ity|en|ers?|ences?|tures?|ples?|als?|phy|phies|ry|ries|cy|cies|mums?|ous|cents?)?(\W*)$/i;
 
   function break_word_en(word) {
     // punctuation, prefix, center, suffix, punctuation
