@@ -76,8 +76,7 @@
   // determine whether a word is good for hyphenation.
   // no numbers, email addresses, hyphens, or &entities;
   function breakable(word) {
-    return word.length >= MIN_WORD &&
-      (!/^[0-9\&]|@|\-|\u00AD/.test(word));
+    return (/\w{6,}/.test(word)) && (!/^[0-9\&]|@|\-|\u00AD/.test(word));
   }
 
   // Detect all Unicode vowels. Just last week I told someone
@@ -107,7 +106,7 @@
   // TeX algo: split on well-known prefixes and suffixes
   // then along the vccv line. This is not i18n nor even
   // generally correct, but is fairly compact.
-  var presuf = /^([^a-z]*)(anti|auto|ac|ad|ag|an|ap|as|at|ab|bi|be|contra|cat|cath|cir|cum|cog|col|com|con|cor|co|desk|de|dis|dif|di|eas|extra|ex|en|em|epi|hy|han|il|in|im|ir|jus|lig|li|manu|man|mal|mis|mid|mono|multi|non|ob|oc|of|op|over|para|per|post|pre|pro|retro|re|rhy|semi|se|sol|sub|suc|suf|super|sup|sur|sus|syn|sym|tech|trans|tri|typo|type|uni|un|won)?(.*?)(ical|able|ings?|ions?|ies|isms?|ists?|ful|ness|ments?|ly|ify|ize|ise|ity|en|tures?|als?|phy|phies|mums?|ous|cents?)?([^a-z]*)$/i;
+  var presuf = /^(\W*)(anti|auto|ab|an|ax|al|as|bi|be|contra|cat|cath|cir|cum|cog|col|com|con|cor|co|desk|de|dis|did|dif|di|eas|extra|ex|en|em|epi|fin|hyst|hy|han|il|in|im|ir|just|jus|lig|li|manu|man|mal|mis|mid|mono|multi|mem|micro|non|nano|ob|oc|of|op|over|para|per|post|pre|peo|pro|retro|re|rhy|some|semi|se|sol|sub|suc|suf|super|sup|sur|sus|syn|sym|sen|tech|trans|tri|typo|type|uni|un|won)?(.*?)(icals?|ables?|ings?|tions?|ions?|ies|isms?|ists?|ful|ness|ments?|ly|ify|ize|ise|ity|en|ers?|ences?|tures?|ples?|als?|phy|phies|ry|ries|cy|cies|mums?|ous|cents?)?(\W*)$/i;
 
   function break_word_en(word) {
     // punctuation, prefix, center, suffix, punctuation
