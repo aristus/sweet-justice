@@ -106,7 +106,7 @@
   // TeX algo: split on well-known prefixes and suffixes
   // then along the vccv line. This is not i18n nor even
   // generally correct, but is fairly compact.
-  var presuf = /^(\W*)(anti|auto|ab|an|ax|al|as|bi|be|contra|cat|cath|cir|cum|cog|col|com|con|cor|co|desk|de|dis|did|dif|di|eas|extra|ex|en|em|epi|evi|fin|hyst|hy|han|il|in|im|ir|just|jus|lig|li|mech|manu|man|mal|mis|mid|mono|multi|mem|micro|non|nano|ob|oc|of|op|over|para|per|post|pre|peo|pro|retro|rea|re|rhy|some|semi|sen|sol|sub|suc|suf|super|sup|sur|sus|syn|sym|tech|trans|tri|typo|type|uni|un|won)?(.*?)(icals?|ables?|ings?|tions?|ions?|ies|isms?|ists?|ful|ness|ments?|ly|ify|ize|ise|ity|en|ers?|ences?|tures?|ples?|als?|phy|phies|ry|ries|cy|cies|mums?|ous|cents?)?(\W*)$/i;
+  var presuf = /^(\W*)(anti|auto|ab|an|ax|al|as|bi|be|contra|cat|cath|cir|cum|cog|col|com|con|cor|could|co|desk|de|dis|did|dif|di|eas|every|ever|extra|ex|en|em|epi|evi|fin|hyst|hy|han|il|in|im|ir|just|jus|lig|lit|li|mech|manu|man|mal|mis|mid|mono|multi|mem|micro|non|nano|ob|oc|of|op|over|para|per|post|pre|peo|pro|retro|rea|re|rhy|should|some|semi|sen|sol|sub|suc|suf|super|sup|sur|sus|syn|sym|syl|tech|trans|tri|typo|type|uni|un|would|won)?(.*?)(icals?|ables?|ings?|tions?|ions?|ies|isms?|ists?|ful|ness|ments?|ly|ify|ize|ise|ity|en|ers?|ences?|tures?|ples?|als?|phy|phies|ry|ries|cy|cies|mums?|ous|cents?)?(\W*)$/i;
 
   function break_word_en(word) {
     // punctuation, prefix, center, suffix, punctuation
@@ -186,17 +186,17 @@
 
   // jQuery
   function sweet_justice_jq() {
-    $('.sweet-justice').each(function(idx,el) {
-      $(el).css({
+    jQuery('.sweet-justice').each(function(idx,el) {
+      jQuery(el).css({
         'text-align':   'justify',
         'text-justify': 'distribute'
       });
       justify_my_love(el);
     });
-    $('.sweet-hyphens').each(function(idx,el) {
+    jQuery('.sweet-hyphens').each(function(idx,el) {
       justify_my_love(el);
     });
-    $('body').bind('copy', copy_protect);
+    jQuery('body').bind('copy', copy_protect);
   }
 
   // YUI3
