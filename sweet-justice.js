@@ -137,8 +137,8 @@
   // More than you ever wanted to know:
   // http://www.cs.tut.fi/~jkorpela/shy.html
   function copy_protect(e) {
-    var body = document.getElementsByTagName("body")[0];
-    var shadow = document.createElement("div");
+    var body = document.getElementsByTagName('body')[0];
+    var shadow = document.createElement('div');
     shadow.style.overflow = 'hidden';
     shadow.style.position = 'absolute';
     shadow.style.top = '-5000px';
@@ -146,7 +146,7 @@
     body.appendChild(shadow);
 
     // FF3, WebKit
-    if (typeof window.getSelection != "undefined") {
+    if (typeof window.getSelection != 'undefined') {
       sel = window.getSelection();
       var range = sel.getRangeAt(0);
       shadow.appendChild(range.cloneContents());
@@ -155,7 +155,7 @@
       sel.selectAllChildren(shadow);
       window.setTimeout(function() {
         shadow.parentNode.removeChild(shadow);
-        if (typeof window.getSelection().setBaseAndExtent != "undefined") {
+        if (typeof window.getSelection().setBaseAndExtent != 'undefined') {
           sel.setBaseAndExtent(
             range.startContainer,
             range.startOffset,
@@ -176,7 +176,7 @@
       range2.select();
       window.setTimeout(function() {
         shadow.parentNode.removeChild(shadow);
-        if (range.text != "") {
+        if (range.text != '') {
           range.select();
         }
       },0);
@@ -187,10 +187,6 @@
   // jQuery
   function sweet_justice_jq() {
     jQuery('.sweet-justice').each(function(idx,el) {
-      jQuery(el).css({
-        'text-align':   'justify',
-        'text-justify': 'distribute'
-      });
       justify_my_love(el);
     });
     jQuery('.sweet-hyphens').each(function(idx,el) {
@@ -202,10 +198,6 @@
   // YUI3
   function sweet_justice_yui(Y) {
     Y.all('.sweet-justice').each(function(el) {
-      el.setStyles({
-        'textAlign':   'justify',
-        'textJustify': 'distribute'
-      });
       justify_my_love(el._node);
     });
     Y.all('.sweet-hyphens').each(function(el) {
@@ -213,13 +205,25 @@
     });
 
     // Y.one('body').on('copy', copy_protect); //hmm. YUI3 doesn't work with this.
-    var body = document.getElementsByTagName("body")[0];
+    var body = document.getElementsByTagName('body')[0];
     if (window.addEventListener) {
-      body.addEventListener("copy", copy_protect, false);
+      body.addEventListener('copy', copy_protect, false);
     } else {
-      body.attachEvent("oncopy", copy_protect);
+      body.attachEvent('oncopy', copy_protect);
     }
   }
+
+  // Set the class styles
+  var style = document.createElement('style');
+  style.type = 'text/css';
+  style.innerHTML = '' +
+      '.sweet-justice {' +
+          'text-align:justify;' +
+          'text-justify:distribute} ' +
+      '.justice-denied {' +
+          'text-align:left;' + // pity there is no text-align:default
+          'text-justify:normal}';
+  document.getElementsByTagName('head')[0].appendChild(style);
 
   // dispatch on library
   if (window.jQuery) {
