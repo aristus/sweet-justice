@@ -214,16 +214,22 @@
   }
 
   // Set the class styles
-  var style = document.createElement('style');
-  style.type = 'text/css';
-  style.innerHTML = '' +
-      '.sweet-justice {' +
-          'text-align:justify;' +
-          'text-justify:distribute} ' +
-      '.justice-denied {' +
-          'text-align:left;' + // pity there is no text-align:default
-          'text-justify:normal}';
-  document.getElementsByTagName('head')[0].appendChild(style);
+  var head = document.getElementsByTagName('head')[0];
+  try {
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    style.innerHTML = '' +
+      '.sweet-justice {text-align:justify;text-justify:distribute} ' +
+      '.justice-denied {text-align:left;text-justify:normal}';
+    head.appendChild(style);
+  } catch (e) {
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'data:text/css;charset=utf-8;base64,LnN3ZWV0LWp1c3RpY2Ugeyd0Z'+
+      'Xh0LWFsaWduOmp1c3RpZnk7dGV4dC1qdXN0aWZ5OmRpc3RyaWJ1dGV9IC5qdXN0aWNlLWR'+
+      'lbmllZCB7dGV4dC1hbGlnbjpsZWZ0O3RleHQtanVzdGlmeTpub3JtYWx9';
+    head.appendChild(link);
+  }
 
   // dispatch on library
   if (window.jQuery) {
