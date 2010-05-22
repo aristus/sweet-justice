@@ -63,8 +63,9 @@
   // If you are a student of English grammar or typography, this
   // will make you cry. If you read anything other than English,
   // this will also make you cry.
+  var whitespace = /[ \s\n\r\v\t]+/;
   function break_dance(text) {
-    var words = text.split(/[\s\n\r\v\t]+/);
+    var words = text.split(whitespace);
     for (var i=0; i<words.length; i++) {
       if (breakable(words[i])) {
         words[i] = break_word_en(words[i]);
@@ -95,11 +96,12 @@
   var simple = new RegExp('(.{2,4}'+v+')'+'('+c+')', 'g');
 
   // "algorithmic" hyphenation
+  var dumb = /\u00AD(.?)|$\u00AD(.{0,2}\w+)$/;
   function break_word_default(word) {
     return word
       .replace(vccv, '$1\u00AD$2')
       .replace(simple, '$1\u00AD$2')
-      .replace(/\u00AD(.?)|$\u00AD(.{0,2}\w+)$/, '$1');
+      .replace(dumb, '$1');
   }
 
   // dictionary-based hypenation similar to the original
@@ -138,6 +140,7 @@
   // http://www.cs.tut.fi/~jkorpela/shy.html
   function copy_protect(e) {
     var body = document.getElementsByTagName('body')[0];
+    var shyphen = /(?:\u00AD|\&#173;|\&shy;)/g;
     var shadow = document.createElement('div');
     shadow.style.overflow = 'hidden';
     shadow.style.position = 'absolute';
@@ -146,16 +149,15 @@
     body.appendChild(shadow);
 
     // FF3, WebKit
-    if (typeof window.getSelection != 'undefined') {
+    if (typeof window.getSelection !== 'undefined') {
       sel = window.getSelection();
       var range = sel.getRangeAt(0);
       shadow.appendChild(range.cloneContents());
-      shadow.innerHTML = shadow.innerHTML
-        .replace(/(?:\u00AD|\&#173;|\&shy;)/g, '');
+      shadow.innerHTML = shadow.innerHTML.replace(shyphen, '');
       sel.selectAllChildren(shadow);
       window.setTimeout(function() {
         shadow.parentNode.removeChild(shadow);
-        if (typeof window.getSelection().setBaseAndExtent != 'undefined') {
+        if (typeof window.getSelection().setBaseAndExtent !== 'undefined') {
           sel.setBaseAndExtent(
             range.startContainer,
             range.startOffset,
@@ -169,14 +171,13 @@
     } else {
       sel = document.selection;
       var range = sel.createRange();
-      shadow.innerHTML = range.htmlText
-        .replace(/(?:\u00AD|\&#173;|\&shy;)/g, '');
+      shadow.innerHTML = range.htmlText.replace(shyphen, '');
       var range2 = body.createTextRange();
       range2.moveToElementText(shadow);
       range2.select();
       window.setTimeout(function() {
         shadow.parentNode.removeChild(shadow);
-        if (range.text != '') {
+        if (range.text !== '') {
           range.select();
         }
       },0);
@@ -186,10 +187,7 @@
 
   // jQuery
   function sweet_justice_jq() {
-    jQuery('.sweet-justice').each(function(idx,el) {
-      justify_my_love(el);
-    });
-    jQuery('.sweet-hyphens').each(function(idx,el) {
+    jQuery('.sweet-justice, .sweet-hyphens').each(function(idx,el) {
       justify_my_love(el);
     });
     jQuery('body').bind('copy', copy_protect);
@@ -197,10 +195,7 @@
 
   // YUI3
   function sweet_justice_yui(Y) {
-    Y.all('.sweet-justice').each(function(el) {
-      justify_my_love(el._node);
-    });
-    Y.all('.sweet-hyphens').each(function(el) {
+    Y.all('.sweet-justice, .sweet-hyphens').each(function(el) {
       justify_my_love(el._node);
     });
 
@@ -213,22 +208,20 @@
     }
   }
 
-  // Set the class styles
-  var head = document.getElementsByTagName('head')[0];
+  // Insert class styles. More mindless browser-banging. *sigh*
   try {
     var style = document.createElement('style');
     style.type = 'text/css';
-    style.innerHTML = '' +
-      '.sweet-justice {text-align:justify;text-justify:distribute} ' +
-      '.justice-denied {text-align:left;text-justify:normal}';
-    head.appendChild(style);
+    var css = '.sweet-justice {text-align:justify;text-justify:distribute} ' +
+              '.justice-denied {text-align:left;text-justify:normal}';
+    if(!!(window.attachEvent && !window.opera)) {
+      style.styleSheet.cssText = css;
+    } else {
+      style.appendChild(document.createTextNode(css));
+    }
+    document.getElementsByTagName('head')[0].appendChild(style);
   } catch (e) {
-    var link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'data:text/css;charset=utf-8;base64,LnN3ZWV0LWp1c3RpY2Ugeyd0Z'+
-      'Xh0LWFsaWduOmp1c3RpZnk7dGV4dC1qdXN0aWZ5OmRpc3RyaWJ1dGV9IC5qdXN0aWNlLWR'+
-      'lbmllZCB7dGV4dC1hbGlnbjpsZWZ0O3RleHQtanVzdGlmeTpub3JtYWx9';
-    head.appendChild(link);
+    // we did our best...
   }
 
   // dispatch on library
