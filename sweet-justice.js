@@ -196,7 +196,7 @@
   // YUI3
   function sweet_justice_yui(Y) {
     Y.all('.sweet-justice, .sweet-hyphens').each(function(el) {
-      justify_my_love(el._node);
+      justify_my_love(Y.Node.getDOMNode(el));
     });
 
     // Y.one('body').on('copy', copy_protect); //hmm. YUI3 doesn't work with this.
