@@ -198,14 +198,8 @@
     Y.all('.sweet-justice, .sweet-hyphens').each(function(el) {
       justify_my_love(Y.Node.getDOMNode(el));
     });
-
-    // Y.one('body').on('copy', copy_protect); //hmm. YUI3 doesn't work with this.
-    var body = document.getElementsByTagName('body')[0];
-    if (window.addEventListener) {
-      body.addEventListener('copy', copy_protect, false);
-    } else {
-      body.attachEvent('oncopy', copy_protect);
-    }
+    Y.Node.DOM_EVENTS.copy = 1; // make sure copy event is enabled in YUI
+    Y.one('body').on('copy', copy_protect);
   }
 
   // Insert class styles. More mindless browser-banging. *sigh*
@@ -227,7 +221,6 @@
   // dispatch on library
   if (window.jQuery) {
     $(window).load(sweet_justice_jq);
-
   } else if (window.YUI) {
     YUI().use('node', function(Y) {
         sweet_justice_yui(Y);
