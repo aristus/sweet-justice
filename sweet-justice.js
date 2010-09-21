@@ -220,7 +220,7 @@
 
   // dispatch on library
   if (window.jQuery) {
-    $(window).load(sweet_justice_jq);
+    jQuery(window).load(sweet_justice_jq);
   } else if (window.YUI) {
     YUI().use('node', function(Y) {
         sweet_justice_yui(Y);
